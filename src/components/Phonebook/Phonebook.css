@@ -1,0 +1,93 @@
+.phonebook_box {
+  padding: 0;
+  margin: 0;
+  width: 768px;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #000;
+  padding: 10px;
+  overflow: hidden;
+  color: #000;
+}
+
+.phonebook__form {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  border: 1px solid #000;
+  width: 500px;
+  padding: 20px;
+}
+
+.phonebook_name {
+  margin-bottom: 5px;
+  font-size: 20px;
+}
+
+.phonebook__input {
+  margin-bottom: 25px;
+  width: auto;
+  max-width: 200px;
+  border: 1px solid #000;
+  border-radius: 5px;
+  outline: none;
+  font-size: 15px;
+  padding: 5px;
+}
+
+.phonebook__input:hover,
+.phonebook__input:focus {
+  box-shadow: 0 0 5px #000;
+}
+
+.phonebook_btn {
+  width: 150px;
+  padding: 5px;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  border: 1px solid rgb(187, 187, 187);
+  border-radius: 5px;
+  height: 35px;
+}
+
+.phonebook_btn:hover {
+  box-shadow: 0 0 5px #000;
+  background-color: rgb(209, 209, 209);
+  border-color: #ccc;
+  color: #fff;
+  font-size: 17px;
+  letter-spacing: 0.12em;
+  text-shadow: 0px 1px 0 rgb(0, 0, 0), 0px -1px 0 rgb(0, 0, 0),
+    1px 0px 0 rgb(0, 0, 0), -1px 0px 0 rgb(0, 0, 0), 1px 1px 0 rgb(0, 0, 0),
+    1px -1px 0 rgb(0, 0, 0), -1px 1px 0 rgb(0, 0, 0), -1px -1px 0 rgb(0, 0, 0);
+}
+
+/* ------------------CONTACTS--------------------- */
+
+.phonebook__contacts {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding-bottom: 30px;
+}
+
+.phonebook__list {
+  list-style: circle;
+  margin: 0;
+}
+
+.phonebook__item {
+  font-size: 25px;
+}
+
+.phonebook__item:not(:last-child) {
+  margin-bottom: 15px;
+}
+
+.phonebook_name__filter {
+  margin-bottom: 10px;
+}
