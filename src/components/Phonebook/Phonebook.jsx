@@ -1,6 +1,11 @@
-import React, { Component } from 'react';
 import './Phonebook.css';
+import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
+import { ContactForm } from './ContactForm/ContactForm';
+import { Filter } from './Filter/Filter';
+import { ContactList } from './ContactList/ContactList';
+
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 export class Phonebook extends Component {
   state = {
     contacts: [
@@ -10,124 +15,72 @@ export class Phonebook extends Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
 
-  handleChange = event => {
-    console.dir(event.target);
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-  };
-
-  handleSubmit = event => {
-    event.preventDefault();
-    this.setState({
-      contacts: [
-        ...this.state.contacts,
-        { name: this.state.name, number: this.state.number, id: nanoid() },
-      ],
-      name: '',
-      number: '',
+  handleSubmit = newContact => {
+    console.log(newContact);
+    const { contacts } = this.state;
+    const { name, number } = newContact;
+    const contact = contacts.find(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    );
+    if (contact) {
+      this.showMessage(`Contact ${name} already exists`);
+      return;
+    }
+    return this.setState({
+      contacts: [...contacts, { name: name, number: number, id: nanoid() }],
     });
   };
 
   handleChangeFilterByName = event => {
-    this.setState(
-      {
-        [event.target.name]: event.target.value,
-      },
-      () => {
-        console.log(event.target.name);
-        const { contacts, filter } = this.state;
-        const newStateContacts = [...contacts];
-        const filteredContacts = contacts.filter(contact => {
-          return contact.name.toLowerCase().includes(filter.toLowerCase());
-        });
-        this.setState(prevState => {
-          console.log(newStateContacts);
-          return {
-            contacts: !contacts.length
-              ? [...newStateContacts]
-              : [...filteredContacts],
-          };
-        });
-      }
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value,
+    });
+  };
+
+  getFIlteredContacts = () => {
+    const { contacts, filter } = this.state;
+    if (!filter) {
+      return contacts;
+    }
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
     );
   };
 
+  showMessage(message) {
+    Notify.warning(message);
+  }
+
+  onDeleteContact = contact => {
+    const { contacts } = this.state;
+    this.setState({
+      contacts: contacts.filter(c => {
+        return c.id !== contact.id;
+      }),
+    });
+  };
+
   render() {
+    const renderList = this.getFIlteredContacts();
     return (
       <div className="phonebook_box">
         <h2>Phonebook</h2>
-        <form onSubmit={this.handleSubmit} className="phonebook__form">
-          <label htmlFor="name" className="phonebook_name">
-            Name
-          </label>
-          <input
-            className="phonebook__input"
-            type="text"
-            name="name"
-            value={this.state.name}
-            onChange={this.handleChange}
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            required
-          />
-          <label htmlFor="number" className="phonebook_name">
-            Number
-          </label>
-          <input
-            className="phonebook__input"
-            type="tel"
-            name="number"
-            value={this.state.number}
-            onChange={this.handleChange}
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            required
-          />
-          <button type="submit" className="phonebook_btn">
-            Add contact
-          </button>
-        </form>
+        <ContactForm handleSubmit={this.handleSubmit} />
         <div className="phonebook__contacts">
           <h2>Contacts</h2>
-          <label
-            htmlFor="filter"
-            className="phonebook_name phonebook_name__filter"
-          >
-            Find contacts by name
-          </label>
-          <input
-            className="phonebook__input"
-            type="text"
-            name="filter"
-            value={this.state.filter}
-            onChange={this.handleChangeFilterByName}
+          <Filter
+            filter={this.state.filter}
+            handleChangeFilterByName={this.handleChangeFilterByName}
           />
-          <ul className="phonebook__list">
-            {this.state.contacts.map(contact => (
-              <li key={nanoid()} className="phonebook__item">
-                {contact.name}: {contact.number}
-              </li>
-            ))}
-          </ul>
+          <ContactList
+            renderList={renderList}
+            onDeleteContact={this.onDeleteContact}
+          />
         </div>
       </div>
     );
   }
 }
-
-// handleSubmit = event => {
-//   event.preventDefault();
-//   this.setState({
-//     contacts: [
-//       ...this.state.contacts,
-//       { name: this.state.name, number: '123-456-789' },
-//     ],
-//   });
-// };
-
-// --------------------     event.target.name -> подивитись до 1 дз
