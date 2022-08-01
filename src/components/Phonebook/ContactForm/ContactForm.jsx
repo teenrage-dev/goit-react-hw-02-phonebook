@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import '../Phonebook.css';
 
 export class ContactForm extends Component {
   state = {
     name: '',
     number: '',
+  };
+  static propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
   };
 
   handleChange = event => {
@@ -23,7 +27,6 @@ export class ContactForm extends Component {
       this.showMessage('Please fill in all fields');
     }
     const contact = callback({ name, number });
-    console.dir(contact);
 
     if (!contact) {
       this.setState({
@@ -36,7 +39,6 @@ export class ContactForm extends Component {
   render() {
     const { name, number } = this.state;
     const { handleSubmit } = this.props;
-    console.log(handleSubmit);
     return (
       <form
         onSubmit={event => {
